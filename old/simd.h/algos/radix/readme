@@ -1,0 +1,14 @@
+readix sort, tuned for sandybridge and xeonphi (still slow)
+
+adapted from Sean Baxter Sort2: http://www.moderngpu.com/sort/algo.html
+
+(c) Evghenii Gaburov, 2013, GPLv3
+
+the best to use with HT, 
+on 1x E5-2687W   6 threads, the sorting rate is ~215M 32-bit keys/sec  on 16M keys
+on 1x E5-2687W  16 threads, the sorting rate is ~300M 32-bit keys/sec  on 16M keys
+on 2x E5-2687W  16 threads, the sorting rate is ~350M 32-bit keys/sec  on 16M keys
+on 2x E5-2687W  32 threads, the sorting rate is ~500M 32-bit keys/sec  on 16M keys
+on XeonPhi, using full cheap with 4threads/core, the rate is ~380Mkey/sec on same data set
+
+Contact me if you have questions.

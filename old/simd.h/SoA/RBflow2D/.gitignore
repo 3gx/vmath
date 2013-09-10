@@ -1,0 +1,10 @@
+*.o
+*~
+*.mod
+*.out
+*.log*
+*.a
+.*
+!.gitignore
+*.s
+*__genmod.f90

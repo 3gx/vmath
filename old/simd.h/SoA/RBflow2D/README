@@ -1,0 +1,40 @@
+Prerequisites:
+g++ v4.6 or v4.7 (better).
+SSE4 (Core+) or AVX (SandyBrdige+) supporting CPU
+
+Please change "CXX" variales in the first few lines of the cpp/Makefile 
+with the name and/or full path of the appropariate g++ version.
+
+-----------
+
+To compile with AVX support (on Sandy/Ivy bridge system)
+$ make -C ./cpp clean
+$ make clean
+$ make -C ./cpp AVX=1 OMP=1
+$ make AVX=1 OMP=1 -j
+
+To compile SSE only:
+$ make -C ./cpp clean
+$ make clean
+$ make -C ./cpp OMP=1 
+$ make OMP=1 -j
+
+Finally, to compile in Single precision:
+$ make -C ./cpp clean
+$ make clean
+$ make -C ./cpp AVX=1 OMP=1 SINGLE=1
+$ make AVX=1 OMP=1 SINGLE=1 -j
+
+to disable OpenMP, omp OMP=1 in the make line
+
+To enable fortran version:
+$ touch fortran/gcurv.f
+$ make OMP=1 AVX=1 FORTRAN=1
+
+-------
+
+Have questions, sugestions, problems, just mail me:
+Evghenii.Gaburov@sara.nl
+
+Good luck!
+

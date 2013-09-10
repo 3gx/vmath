@@ -1,0 +1,51 @@
+Hermite-4 N-body integrator
+
+ISPC version, uses both single and double precision
+
+to run on Phi, just
+$ make FAST=1
+$ ssh mic0
+$ ./hermite4_mic
+-------------------
+  Usage: ./hermite4_mic fp64 icc [nbodies=8192] [nsteps=40] [eta=0.1]
+    fp64= 1 to use double precision, otherwise use single precision
+    icc=  1 to use icc_code
+-------------------
+
+$ OMP_NUM_THREADS=228 ./hermite4_mic 0 0 131072
+precision: float
+code: ispc
+nbodies= 131072
+nstep= 40
+ eta= 0.1
+---Intializing nbody---
+nthreads= 228
+ mean flop rate in 1.00505 sec [752.114 GFLOP/s]
+...
+
+$ OMP_NUM_THREADS=228 ./hermite4_mic 1 0 131072
+precision: double
+code: ispc
+nbodies= 131072
+nstep= 40
+ eta= 0.1
+---Intializing nbody---
+nthreads= 228
+ mean flop rate in 1.78047 sec [424.559 GFLOP/s]
+...
+
+You can play with paremeters or affinity via, for example,
+$ export KMP_AFFINITY=explicit,proclist=[0-227]
+$ OMP_NUM_THREADS=4 ./hermite4_mic 1 0 8192
+precision: double
+code: ispc
+nbodies= 8192
+nstep= 40
+ eta= 0.1
+---Intializing nbody---
+nthreads= 4
+ mean flop rate in 0.324529 sec [9.09858 GFLOP/s]
+
+single core performance is ~50% peak, compare to full chip performance of ~42% of the peak
+
+

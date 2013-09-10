@@ -1,0 +1,118 @@
+Hermite 4th, 6ht & 8th order individual (blocked in power of 2) time-step
+
+(c) driver code Keigo Nitadori , keigo@riken.jp
+(c) ispc version for AVX & XeonPhi by Evghenii Gaburov, evghenii.gaburov@surfsara.nl
+(c) 2013
+--------
+BSD Licence
+
+to compile
+$ make 
+
+requirements for XeonPhi
+ispc v1.3.1dev (ispc.github.com)
+Intel C++ compiler v13.1.0
+
+$ make
+$ pwd
+path
+$ ssh mic0
+$ ssh  path
+$  time ./hermite4_mic  < ./inp32k-4
+snapin : pl32k.dat
+snapout_base :
+dumpin :
+dumpout_base : dump.4th.32k.bin
+order : 4
+snapid : 0
+dumpid : 0
+tend : 0.5
+eta : 0.1
+eta_s : 0.01
+dtmax : 0.0625
+eps : nan
+kt_for_eps : 4
+log_interval : 0.0078125
+snap_interval : 2
+dump_interval : 1
+read snapshot (form M.I.), n = 32768, t = 0.000000
+allocate resources for n = 32768
+eps is set to 1.220703e-04
+OMP: Warning #63: KMP_AFFINITY: proclist specified, setting affinity type to "explicit".
+ke =   2.5314811630196332e-01, pe =  -5.0624768633555572e-01, e =  -2.5309957003359240e-01
+done in 0.154482 sec: ni= 32768 :: 305.826 GFLOPs
+ke =   2.5314811630196310e-01, pe =  -5.0624768633555561e-01, e =  -2.5309957003359251e-01
+done in 0.150827 sec: ni= 32768 :: 313.237 GFLOPs
+done in 0.150845 sec: ni= 32768 :: 313.2 GFLOPs
+done in 0.150849 sec: ni= 32768 :: 313.192 GFLOPs
+t = 0.062500
+ steps: 3271 1016143 3271 1016143
+ nact : 310.652094
+ de(local/global) : -3.431422e-08 -3.431422e-08
+ 7.571303 sec, 193.502601 Gflops
+0.062500   3271 1016143       3271    1016143    310.65  -3.431422e-08  -3.431422e-08  7.571303  193.502601
+
+$  time ./hermite6_mic  < ./inp32k-6
+snapin : pl32k.dat
+snapout_base :
+dumpin :
+dumpout_base :
+order : 6
+snapid : 0
+dumpid : 0
+tend : 0.5
+eta : 0.5
+eta_s : 0.1
+dtmax : 0.0625
+eps : nan
+kt_for_eps : 4
+log_interval : 0.0078125
+snap_interval : 2
+dump_interval : 1
+read snapshot (form M.I.), n = 32768, t = 0.000000
+allocate resources for n = 32768
+eps is set to 1.220703e-04
+OMP: Warning #63: KMP_AFFINITY: proclist specified, setting affinity type to "explicit".
+ke =   2.5314811630196332e-01, pe =  -5.0624768688154653e-01, e =  -2.5309957057958321e-01
+INITIAL FORCE
+done in 0.281751 sec: ni= 32768 :: 289.633 GFLOPs
+done in 0.281959 sec: ni= 32768 :: 289.419 GFLOPs
+ke =   2.5314811630196321e-01, pe =  -5.0624768688154598e-01, e =  -2.5309957057958277e-01
+done in 0.277956 sec: ni= 32768 :: 293.587 GFLOPs
+done in 0.277877 sec: ni= 32768 :: 293.671 GFLOPs
+done in 0.278032 sec: ni= 32768 :: 293.507 GFLOPs
+t = 0.062500
+ steps: 908 510143 908 510143
+ nact : 561.831498
+ de(local/global) : -2.429809e-10 -2.429827e-10
+ 5.942823 sec, 272.848022 Gflops
+
+
+..
+
+
+-----------------
+Copyright (c) 2013, Keigo Nitadori & Evghenii Gaburov
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

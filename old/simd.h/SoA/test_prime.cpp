@@ -1,0 +1,31 @@
+#include <iostream>
+
+
+  template<const int n>
+void print()
+{
+  fprintf(stderr, " number= %d \n", n);
+}
+
+constexpr bool is_prime_recursive(size_t number, size_t c)
+{
+  return (c*c > number) ? true : 
+    (number % c == 0) ? false : 
+    is_prime_recursive(number, c+1);
+}
+
+constexpr bool is_prime_func(size_t number)
+{
+  return (number <= 1) ? false : is_prime_recursive(number, 2);
+}
+
+int main(void)
+{
+  static_assert(is_prime_func(7), "...");  // Computed at compile-time
+#if 1
+  const int i = 11;
+  static_assert(is_prime_func(11), "...");  // Computed at compile-time
+  int j = is_prime_func(i); // Computed at run-time
+#endif
+  return 0;
+}

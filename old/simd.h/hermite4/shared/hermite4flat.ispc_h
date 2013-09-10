@@ -1,0 +1,99 @@
+#ifndef real
+#error "real must be defined
+#endif
+
+void TEMPLATE(body_body_force,real)(
+    real &ax, real &ay, real &az, real &gp,
+    real &jx, real &jy, real &jz,
+    const real xi, const real yi, const real zi,
+    const real vxi, const real vyi, const real vzi,
+    const real xj, const real yj, const real zj,
+    const real vxj, const real vyj, const real vzj, const real mj)
+{
+  const real dx = xj - xi;
+  const real dy = yj - yi;
+  const real dz = zj - zi;
+
+  const real ds2 = dx*dx + dy*dy + dz*dz;
+
+  const real  inv_ds  = ds2 > 0.0 ? rsqrt(ds2) : 0.0;
+  const real  inv_ds2 = inv_ds*inv_ds;
+  const real minv_ds  = inv_ds  * mj;
+  const real minv_ds3 = inv_ds2 * minv_ds;
+
+  ax += minv_ds3 * dx;
+  ay += minv_ds3 * dy;
+  az += minv_ds3 * dz;
+  gp -= minv_ds;
+  
+  const real dvx = vxj - vxi;
+  const real dvy = vyj - vyi;
+  const real dvz = vzj - vzi;
+  const real rv  = dx*dvx + dy*dvy + dz*dvz;
+  
+  const real Jij = (-3.0) * (rv * inv_ds2 * minv_ds3);
+  
+  jx += minv_ds3*dvx + Jij*dx;
+  jy += minv_ds3*dvy + Jij*dy;
+  jz += minv_ds3*dvz + Jij*dz;
+}
+
+export void TEMPLATE(compute_forces,real)(
+    uniform const int     n,
+    uniform const int     n1,
+    uniform const int     n2,
+    uniform const real mass[],
+    uniform const real posx[],
+    uniform const real posy[],
+    uniform const real posz[],
+    uniform const real velx[],
+    uniform const real vely[],
+    uniform const real velz[],
+    uniform       real accx[],
+    uniform       real accy[],
+    uniform       real accz[],
+    uniform       real jrkx[],
+    uniform       real jrky[],
+    uniform       real jrkz[],
+    uniform       real gpot[])
+{
+  foreach (i = n1 ... n2)
+  {
+    real ax = 0.0;
+    real ay = 0.0;
+    real az = 0.0;
+    real gp = 0.0;
+    real jx = 0.0;
+    real jy = 0.0;
+    real jz = 0.0;
+    const real  xi = posx[i];
+    const real  yi = posy[i];
+    const real  zi = posz[i];
+    const real vxi = velx[i];
+    const real vyi = vely[i];
+    const real vzi = velz[i];
+
+    for (uniform int j = 0; j < n; j++)
+    {
+      const real  xj = posx[j];
+      const real  yj = posy[j];
+      const real  zj = posz[j];
+      const real vxj = velx[j];
+      const real vyj = vely[j];
+      const real vzj = velz[j];
+      const real  mj = mass[j];
+      TEMPLATE(body_body_force,real)(ax,ay,az,gp,jx,jy,jz,
+          xi,yi,zi,vxi,vyi,vzi,
+          xj,yj,zj,vxj,vyj,vzj,mj);
+    }
+    accx[i] = ax;
+    accy[i] = ay;
+    accz[i] = az;
+    jrkx[i] = jx;
+    jrky[i] = jy;
+    jrkz[i] = jz;
+    gpot[i] = gp;
+  }
+}
+
+#undef real

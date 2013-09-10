@@ -1,0 +1,24 @@
+ N2  N3   NSST(>1=RK,else AB) NWRIT NREAD
+ 2049 2049  1                  0  0
+ N2P N3P(passo plottaggio)
+ 1   1   
+ NTST   TPRINT       TPIN      TMAX     IRESET
+ 1000      100        1e-1      100000000.0       0
+ ALX3D      ISTR3   STR3  RMED31   ETDP3  STRB3
+ 1.0000       4       0.8   3.40     .60    2.20
+  STRR      REXT ISTR    RMED   ETDP  STRB
+1.000001    2.0   0      .25  .65   2.0000
+   RA   PRA      DT      RESID    CFLMAX
+ 1.e+6  1.000    5.e-4   1.e-1    0.2
+ inslws   inslwn  inslwr   ibuo
+  1          1      1       1  
+ ISTAT	TIMEAV	TIMERMS	IRESTA
+  0	 30.0	50.0	 0
+ NLEV     DISM   NN
+  10     0.100    30
+ IDTV(0=dt fisso,1=var.)     DTMAX(per dt var.)   CFLLIM(per dt fisso)
+   1                         0.01                1.0
+ NINI    NFIN    NSTRI
+   1     15       1
+ NSON (numero di sonde (max. 400)) 
+   1 

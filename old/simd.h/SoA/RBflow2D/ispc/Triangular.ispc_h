@@ -1,0 +1,17 @@
+#pragma once
+
+struct Tridiag
+{
+  real a, b, c, d;
+};
+
+void static 
+solveX(
+  const int nx,
+  const int ny,
+  const real (*qin )[M2],
+  __out real (*qout)[M2],
+  __out Tridiag mat[])
+{
+} 
+  

@@ -1,0 +1,18 @@
+order 4
+eta   0.1
+eta_s 0.01
+
+snapin       pl8k.dat
+#snapout_base snap.2k.%04d
+#dumpin       dump.4th.2k.bin
+#dumpout_base dump.4th.2k.%04d
+dumpout_base dump.4th.2k.bin
+
+tend       0.5
+dtmaxinv   16
+kt_for_eps 4.0
+
+#log_interval  0.25
+log_interval 0.0078125
+snap_interval 2.0
+dump_interval 1.0

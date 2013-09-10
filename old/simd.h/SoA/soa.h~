@@ -1,0 +1,100 @@
+#pragma once
+
+#include <vector>
+
+template<typename T>
+struct vec3D
+{
+  T x, y, z;
+};
+
+typedef double real;
+typedef vec3D<real> vec3;
+
+struct Partricle
+{
+  typedef std::vector<Particle> Vector;
+  vec3 pos;
+  vec3 vel;
+  vec3 force;
+  real mass;
+  real iPad[2];
+
+  Particle(
+      const vec3 &_pos,
+      const vec3 &_vel,
+      const vec3 &_force,
+      const real &_mass) :
+    pos  (  _pos),
+    vel  (  _vel),
+    force(_force),
+    mass ( _mass) {}
+};
+
+struct ParticleArray_AoS
+{
+  private:
+    Particle::Vector buf;
+  public:
+    typedef       Particle&       ParticleRef;
+    typedef const Particle&  constParticleRef; 
+
+    size_t size() const { return buf.size(); }
+    void resize(const size_t size) { buf.resize(size); }
+    void reserve(const size_t size) { buf.reserve(size); }
+    void push_back(const Particle &p) { buf.push_back(p); }
+    void erase(const int i) { buf.erase(buf.begin() + i); }
+    ParticleRef operator[] (const int i) { return buf[i]; }
+    constParticleRef operator[] (const int i)c const { return buf[i]; }
+};
+
+struct ParticleArray_SoA
+{
+  private:
+    std::vector<vec3> pos, vel, force;
+    std::vector<real> mass;
+  public:
+    struct ParticleRef
+    {
+      vec3 &pos;
+      vec3 &vel;
+      vec3 &force;
+      real &mass;
+      ParticleRef(
+          vec3 &_pos,
+          vec3 &_vel,
+          vec3 &_force,
+          real &_mass) :
+        pos(_pos), vel(_vel), force(_force), mass(_mass) {}
+    };
+    struct ConstParticleRef
+    {
+      const vec3 &pos;
+      const vec3 &vel;
+      const vec3 &force;
+      const real &mass;
+      ConsParticleRef(
+          const vec3 &_pos,
+          const vec3 &_vel,
+          const vec3 &_force,
+          const real &_mass) :
+        pos(_pos), vel(_vel), force(_force), mass(_mass) {}
+    };
+
+    size_t size() const { return pos.size(); }
+    void resize (const size_t size) { pos.resize(size); vel.resize(size); force.resize(size); mass.resize(size); }
+    void reserve(const size_t size) { pos.reserve(size); vel.reserve(size); force.reserve(size); mass.reserve(size); }
+    void push_back(const Particle &p) { pos.push_back(p.pos); vel.push_back(p.vel); force.push_back(p.force); mass.push_back(p.mass); }
+    void erase(const int i) { pos.erase(pos.begin() + i); vel.erase(vel.begin() + i); force.erase(force.begin() + i); mass.erase(mass.begin() + i); }
+
+    ParticleRef operator[] (const int i) 
+    {
+      return ParticleRef(position[i], velocity[i], force[i], mass[i]);
+    }
+
+    ConstParticleRef operator[] (const int i) 
+    {
+      return ConsParticleRef(position[i], velocity[i], force[i], mass[i]);
+    }
+};
+
