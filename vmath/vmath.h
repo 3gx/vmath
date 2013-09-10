@@ -159,6 +159,7 @@ struct Vectorize
     }
 };
 
+
 #ifdef __AVX512__
 #error "AVX512 is not supported"
 #include "avx512.h"
@@ -176,3 +177,26 @@ struct Vectorize
 #define NOVECTORISA
 #endif
 #include "scalar.h"
+
+#define VECTORFUNCTION(vreal,vint,vmask,index) \
+    template<typename vreal, typename vint, typename vmask>\
+      inline void operator() (const int index,\
+          const vreal __fdum__, const vint __idum__, const vmask __bdum__) const __attribute__((always_inline))
+
+struct foreach
+{
+  template<typename Lambda>
+    static void loop(const int beg, const int end, const Lambda &func)
+    {
+#ifndef NOVECTORISA
+      const int n    = end - beg;
+      const int nvec = vdouble::round(n);
+      for (int i = 0; i < nvec; i += vdouble::SIZE)
+        func(i, vdouble(0.0), vinteger(0), vboolean(0.0));
+#else
+      const int nvec = 0;
+#endif
+      for (int i = nvec; i < n; i++)
+        func(i, 0.0, 0, false);
+    }
+};
