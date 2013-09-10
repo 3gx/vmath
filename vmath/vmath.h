@@ -170,7 +170,11 @@ struct Vectorize
 #include "mic.h"
 #elif defined __AVX__
 #warning "AVX is enabled"
+#if 0
+#include "avx-x2.h"
+#else
 #include "avx.h"
+#endif
 #elif defined __SSE__
 #warning "SSE is enabled"
 #include "sse.h"
