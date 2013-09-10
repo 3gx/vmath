@@ -9,6 +9,8 @@
 /****** INTEGER *********/
 /************************/
 
+template<> static inline int vspan<int>(const int i) { return i; }
+
 /***** LOAD/STORE *******/
 
 /******** MATH ***********/

@@ -10,7 +10,8 @@ struct simple
 {
   simple(const double *vin, double *vout, const int count) 
   {
-    foreach::loop(0,count,mainloop(vin,vout));
+    mainloop m(vin,vout);
+    foreach::loop(0,count,m);
   }
 
   struct mainloop
@@ -19,7 +20,7 @@ struct simple
     const double *vin;
     double *vout;
 
-    VECTORFUNCTION(vreal,vint,vmask,index)
+    VECTORLOOPFUNCTION(vreal,vint,vmask,index)
     {
       printf("index= %d sizof(vreal)= %d\n", index, sizeof(vreal));
       vreal v = vload<vreal>(&vin[index]);

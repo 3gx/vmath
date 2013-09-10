@@ -7,6 +7,8 @@
 /****** INTEGER *********/
 /************************/
 
+template<typename vint> static inline vint vspan(const int);
+
 /***** LOAD/STORE *******/
 
 /* vector load */
@@ -178,15 +180,15 @@ struct Vectorize
 #endif
 #include "scalar.h"
 
-#define VECTORFUNCTION(vreal,vint,vmask,index) \
+#define VECTORLOOPFUNCTION(vreal,vint,vmask,index) \
     template<typename vreal, typename vint, typename vmask>\
       inline void operator() (const int index,\
-          const vreal __fdum__, const vint __idum__, const vmask __bdum__) const __attribute__((always_inline))
+          const vreal __fdum__, const vint __idum__, const vmask __bdum__) __attribute__((always_inline))
 
 struct foreach
 {
   template<typename Lambda>
-    static void loop(const int beg, const int end, const Lambda &func)
+    static void loop(const int beg, const int end, Lambda &func)
     {
 #ifndef NOVECTORISA
       const int n    = end - beg;

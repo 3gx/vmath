@@ -56,6 +56,8 @@ struct int4
   }
 };
 
+template<> static inline int4 vspan<int4>(const int i) { return _mm_set_epi32(i+3,i+2,i+1,i); }
+
 /***** LOAD/STORE *******/
 
 /******** MATH ***********/
