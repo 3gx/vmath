@@ -1,4 +1,5 @@
 vmath
 =====
+(c) Evghenii Gaburov, 2013
 
-vmath.h
+Currently works only with Intel C++ Compiler ver 13.1 and above.
