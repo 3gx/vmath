@@ -16,7 +16,7 @@ class SimdMemTest : public testing::Test
     using vref  = SimdRefT<T>;
     using iref  = SimdIRefT<T>;
 
-    enum {NVEL=4, NSEL = NVEL*vtype::VLEN};
+    enum {NVEL=32, NSEL = NVEL*vtype::VLEN};
     std::array<stype, NSEL> data;
 
     SimdMemTest() {}
@@ -34,7 +34,6 @@ class SimdMemTest : public testing::Test
 
     void test_vref()
     {
-
       // test vload from simd reference to vtype
       vtype vLoad[NVEL];
       for (int i = 0; i < NVEL; i++)
