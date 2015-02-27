@@ -15,6 +15,8 @@ struct Simd<double>
   public:
     enum {VLEN = 8};
 
+    Simd() {}
+
     static Simd vloadu(const double *ptr)
     {
       return Simd(_mm256_loadu_pd(ptr), _mm256_loadu_pd(ptr+4));
@@ -54,6 +56,7 @@ struct Simd<float>
 
   public:
     enum {VLEN = 8};
+    Simd() {}
 
     inline static Simd vgather(const float *base, const Simd<int> &idx);
     inline static void vscatter(float *base, const Simd<int> &idx, const Simd &x);
@@ -102,6 +105,7 @@ struct Simd<int>
     __m128i getFirst() const {return v1;}
     __m128i getSecond() const {return v2;}
     
+    Simd() {}
     static Simd vloadu(const int *ptr)
     {
       return Simd(_mm256_loadu_si256(reinterpret_cast<const __m256i*>(ptr)));
