@@ -168,8 +168,8 @@ struct Simd<int>
 inline Simd<double> Simd<double>::vgather(const double *base, const Simd<int> &idx)
 {
   return Simd<double>(
-      _mm256_i32gather_pd(base, idx.getFirst(), /*scale*/ 1),
-      _mm256_i32gather_pd(base, idx.getSecond(), /*scale*/ 1)
+      _mm256_i32gather_pd(base, idx.getFirst(), /*scale*/ 8),
+      _mm256_i32gather_pd(base, idx.getSecond(), /*scale*/ 8)
       );
 }
 inline void Simd<double>::vscatter(double *base, const Simd<int> &idx, const Simd<double> &x)
@@ -182,7 +182,7 @@ inline void Simd<double>::vscatter(double *base, const Simd<int> &idx, const Sim
 inline Simd<float> Simd<float>::vgather(const float *base, const Simd<int> &idx)
 {
   return Simd<float>(
-      _mm256_i32gather_ps(base, idx.getFull(), /*scale*/ 1)
+      _mm256_i32gather_ps(base, idx.getFull(), /*scale*/ 4)
       );
 }
 inline void Simd<float>::vscatter(float *base, const Simd<int> &idx, const Simd<float> &x)

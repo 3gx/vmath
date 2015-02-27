@@ -15,4 +15,5 @@
 !.gitignore
 .*
 *~
+build
 
