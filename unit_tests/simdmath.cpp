@@ -1,6 +1,7 @@
 #include <simd.h>
 #include <cmath>
 #include <array>
+#include <random>
 #include <gtest/gtest.h>
 
 template<typename T>
@@ -20,10 +21,13 @@ class SimdMathTest : public testing::Test
 
     virtual void SetUp()
     {
+      std::random_device rd;
+      std::mt19937 gen(rd());
+      std::uniform_int_distribution<> dis(1, 1<<16);
       for (int i = 0; i < vtype::VLEN; i++)
       {
-        rhs[i] = static_cast<stype>(ceil(drand48()*(1<<16)));
-        lhs[i] = static_cast<stype>(ceil(drand48()*(1<<16)));
+        rhs[i] = static_cast<stype>(dis(gen)); 
+        lhs[i] = static_cast<stype>(dis(gen)); 
       }
     }
 

@@ -6,6 +6,7 @@
 #include <array>
 #include <algorithm>
 #include <gtest/gtest.h>
+#include <random>
 
 template<typename T> 
 class SimdMemTest : public testing::Test
@@ -24,8 +25,11 @@ class SimdMemTest : public testing::Test
 
     virtual void SetUp()
     {
+      std::random_device rd;
+      std::mt19937 gen(rd());
+      std::uniform_int_distribution<> dis(1, 1<<16);
       for (int i = 0; i < NSEL; i++)
-        data[i] = static_cast<stype>(ceil(drand48()*(1<<16)));
+        data[i] = static_cast<stype>(dis(gen)); 
     }
     
     virtual void TearDown()
