@@ -114,6 +114,51 @@ struct Simd<int>
     {
       _mm256_storeu_si256(reinterpret_cast<__m256i*>(ptr), x.v);
     }
+    
+    friend Simd operator+(const Simd &x, const Simd &y)
+    {
+      return Simd(x.v + y.v);
+    }
+
+  private:
+    template<typename Op>
+      static Simd compute(const Simd &x, const Simd &y, Op&& op)
+      {
+        int sx[VLEN], sy[VLEN], sz[VLEN];
+        vstoreu(sx,x);
+        vstoreu(sy,y);
+        for (int i = 0; i < VLEN; i++)
+          sz[i] = op(sx[i], sy[i]);
+        return vloadu(sz);
+      }
+
+  public:
+
+
+    friend Simd operator-(const Simd &x, const Simd &y)
+    {
+#ifdef __clang__
+      return compute(x, y, [](int x, int y) { return x - y; });
+#else
+      return Simd(x.v - y.v);
+#endif
+    }
+    friend Simd operator*(const Simd &x, const Simd &y)
+    {
+#ifdef __clang__
+      return compute(x, y, [](int x, int y) { return x * y; });
+#else
+      return Simd(x.v * y.v);
+#endif
+    }
+    friend Simd operator/(const Simd &x, const Simd &y)
+    {
+#ifdef __clang__
+      return compute(x, y, [](int x, int y) { return x / y; });
+#else
+      return Simd(x.v / y.v);
+#endif
+    }
 };
    
 inline Simd<double> Simd<double>::vgather(const double *base, const Simd<int> &idx)
