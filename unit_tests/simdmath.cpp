@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 template<typename T>
-class SimdTest : public testing::Test
+class SimdMathTest : public testing::Test
 {
   protected:
     using stype = T;
@@ -15,8 +15,8 @@ class SimdTest : public testing::Test
     std::array<stype,vtype::VLEN> rhs, lhs, res;
     vref vrhs, vlhs, vres;
 
-    SimdTest() : vrhs(rhs[0]), vlhs(lhs[0]), vres(res[0])  {}
-    virtual ~SimdTest() {}
+    SimdMathTest() : vrhs(rhs[0]), vlhs(lhs[0]), vres(res[0])  {}
+    virtual ~SimdMathTest() {}
 
     virtual void SetUp()
     {
@@ -63,20 +63,20 @@ class SimdTest : public testing::Test
 
 namespace 
 {
-  using SimdDouble= SimdTest<double>;
-  TEST_F(SimdDouble, ADD)
+  using SimdMathDouble= SimdMathTest<double>;
+  TEST_F(SimdMathDouble, ADD)
   {
     test_add();
   }
-  TEST_F(SimdDouble, SUB)
+  TEST_F(SimdMathDouble, SUB)
   {
     test_sub();
   }
-  TEST_F(SimdDouble, MUL)
+  TEST_F(SimdMathDouble, MUL)
   {
     test_mul();
   }
-  TEST_F(SimdDouble, DIV)
+  TEST_F(SimdMathDouble, DIV)
   {
     test_div();
   }
@@ -84,20 +84,20 @@ namespace
 
 namespace 
 {
-  using SimdFloat= SimdTest<float>;
-  TEST_F(SimdFloat, ADD)
+  using SimdMathFloat= SimdMathTest<float>;
+  TEST_F(SimdMathFloat, ADD)
   {
     test_add();
   }
-  TEST_F(SimdFloat, SUB)
+  TEST_F(SimdMathFloat, SUB)
   {
     test_sub();
   }
-  TEST_F(SimdFloat, MUL)
+  TEST_F(SimdMathFloat, MUL)
   {
     test_mul();
   }
-  TEST_F(SimdFloat, DIV)
+  TEST_F(SimdMathFloat, DIV)
   {
     test_div();
   }
@@ -105,20 +105,20 @@ namespace
 
 namespace 
 {
-  using SimdInt= SimdTest<int>;
-  TEST_F(SimdInt, ADD)
+  using SimdMathInt= SimdMathTest<int>;
+  TEST_F(SimdMathInt, ADD)
   {
     test_add();
   }
-  TEST_F(SimdInt, SUB)
+  TEST_F(SimdMathInt, SUB)
   {
     test_sub();
   }
-  TEST_F(SimdInt, MUL)
+  TEST_F(SimdMathInt, MUL)
   {
     test_mul();
   }
-  TEST_F(SimdInt, DIV)
+  TEST_F(SimdMathInt, DIV)
   {
     test_div();
   }
