@@ -7,10 +7,12 @@ template<typename T>
 class SimdTest : public testing::Test
 {
   protected:
-    using simd = Simd<T>;
-    using vref = SimdRefT<T>;
+    using stype = T;
+    using vtype = Simd<T>;
+    using vref  = SimdRefT<T>;
+    using iref  = SimdIRefT<T>;
 
-    std::array<T,simd::VLEN> rhs, lhs, res;
+    std::array<stype,vtype::VLEN> rhs, lhs, res;
     vref vrhs, vlhs, vres;
 
     SimdTest() : vrhs(rhs[0]), vlhs(lhs[0]), vres(res[0])  {}
@@ -18,15 +20,43 @@ class SimdTest : public testing::Test
 
     virtual void SetUp()
     {
-      for (int i = 0; i < simd::VLEN; i++)
+      for (int i = 0; i < vtype::VLEN; i++)
       {
-        rhs[i] = static_cast<T>(ceil(drand48()*(1<<16)));
-        lhs[i] = static_cast<T>(ceil(drand48()*(1<<16)));
+        rhs[i] = static_cast<stype>(ceil(drand48()*(1<<16)));
+        lhs[i] = static_cast<stype>(ceil(drand48()*(1<<16)));
       }
     }
 
     virtual void TearDown()
     {
+    }
+
+    void test_add()
+    {
+      vres = vrhs + vlhs;
+      for (int i = 0; i < vtype::VLEN; i++)
+        ASSERT_EQ(res[i], rhs[i] + lhs[i]);
+    }
+
+    void test_sub()
+    {
+      vres = vrhs - vlhs;
+      for (int i = 0; i < vtype::VLEN; i++)
+        ASSERT_EQ(res[i], rhs[i] - lhs[i]);
+    }
+    
+    void test_mul()
+    {
+      vres = vrhs * vlhs;
+      for (int i = 0; i < vtype::VLEN; i++)
+        ASSERT_EQ(res[i], rhs[i] * lhs[i]);
+    }
+
+    void test_div()
+    {
+      vres = vrhs / vlhs;
+      for (int i = 0; i < vtype::VLEN; i++)
+        ASSERT_EQ(res[i], rhs[i] / lhs[i]);
     }
 
 };
@@ -36,27 +66,19 @@ namespace
   using SimdDouble= SimdTest<double>;
   TEST_F(SimdDouble, ADD)
   {
-    vres = vrhs + vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] + lhs[i]);
+    test_add();
   }
   TEST_F(SimdDouble, SUB)
   {
-    vres = vrhs - vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] - lhs[i]);
+    test_sub();
   }
   TEST_F(SimdDouble, MUL)
   {
-    vres = vrhs * vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] * lhs[i]);
+    test_mul();
   }
   TEST_F(SimdDouble, DIV)
   {
-    vres = vrhs / vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] / lhs[i]);
+    test_div();
   }
 }
 
@@ -65,27 +87,19 @@ namespace
   using SimdFloat= SimdTest<float>;
   TEST_F(SimdFloat, ADD)
   {
-    vres = vrhs + vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] + lhs[i]);
+    test_add();
   }
   TEST_F(SimdFloat, SUB)
   {
-    vres = vrhs - vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] - lhs[i]);
+    test_sub();
   }
   TEST_F(SimdFloat, MUL)
   {
-    vres = vrhs * vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] * lhs[i]);
+    test_mul();
   }
   TEST_F(SimdFloat, DIV)
   {
-    vres = vrhs / vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] / lhs[i]);
+    test_div();
   }
 }
 
@@ -94,27 +108,19 @@ namespace
   using SimdInt= SimdTest<int>;
   TEST_F(SimdInt, ADD)
   {
-    vres = vrhs + vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] + lhs[i]);
+    test_add();
   }
   TEST_F(SimdInt, SUB)
   {
-    vres = vrhs - vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      EXPECT_EQ(res[i], rhs[i] - lhs[i]);
+    test_sub();
   }
   TEST_F(SimdInt, MUL)
   {
-    vres = vrhs * vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] * lhs[i]);
+    test_mul();
   }
   TEST_F(SimdInt, DIV)
   {
-    vres = vrhs / vlhs;
-    for (int i = 0; i < simd::VLEN; i++)
-      ASSERT_EQ(res[i], rhs[i] / lhs[i]);
+    test_div();
   }
 }
 

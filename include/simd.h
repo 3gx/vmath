@@ -114,6 +114,9 @@ struct Simd<int>
     {
       _mm256_storeu_si256(reinterpret_cast<__m256i*>(ptr), x.v);
     }
+
+    inline static Simd vgather(const int *base, const Simd<int> &idx);
+    inline static void vscatter(int *base, const Simd<int> &idx, const Simd &x);
     
 
   private:
@@ -189,6 +192,19 @@ inline void Simd<float>::vscatter(float *base, const Simd<int> &idx, const Simd<
 {
   auto index = reinterpret_cast<const   int*>(&idx);
   auto value = reinterpret_cast<const float*>(&  x);
+  for (int i= 0; i < VLEN; i++)
+    base[index[i]] = value[i];
+}
+inline Simd<int> Simd<int>::vgather(const int *base, const Simd<int> &idx)
+{
+  return Simd<int>(
+      _mm256_i32gather_epi32(base, idx.getFull(), /*scale*/ 4)
+      );
+}
+inline void Simd<int>::vscatter(int *base, const Simd<int> &idx, const Simd<int> &x)
+{
+  auto index = reinterpret_cast<const int*>(&idx);
+  auto value = reinterpret_cast<const int*>(&  x);
   for (int i= 0; i < VLEN; i++)
     base[index[i]] = value[i];
 }
