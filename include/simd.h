@@ -115,10 +115,6 @@ struct Simd<int>
       _mm256_storeu_si256(reinterpret_cast<__m256i*>(ptr), x.v);
     }
     
-    friend Simd operator+(const Simd &x, const Simd &y)
-    {
-      return Simd(x.v + y.v);
-    }
 
   private:
     template<typename Op>
@@ -135,6 +131,14 @@ struct Simd<int>
   public:
 
 
+    friend Simd operator+(const Simd &x, const Simd &y)
+    {
+#ifdef __clang__
+      return compute(x, y, [](int x, int y) { return x + y; });
+#else
+      return Simd(x.v + y.v);
+#endif
+    }
     friend Simd operator-(const Simd &x, const Simd &y)
     {
 #ifdef __clang__
