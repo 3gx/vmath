@@ -39,9 +39,12 @@ class SimdMemTest : public testing::Test
     void test_vref()
     {
       // test vload from simd reference to vtype
-      vtype vLoad[NVEL];
+      vtype vLoad[NVEL], vStore[NVEL];
       for (int i = 0; i < NVEL; i++)
+      {
         vLoad[i] = vref(data[i*vtype::VLEN]);
+        vStore[i] = vtype(0);
+      }
 
       auto sLoad = (stype*)vLoad;
       for (int i = 0; i < NSEL; i++)
@@ -51,8 +54,8 @@ class SimdMemTest : public testing::Test
       std::array<stype,NSEL> store;
       for (int i = 0; i < NVEL; i++)
       {
-        vref vStore(store[i*vtype::VLEN]);
-        vStore = vLoad[i];
+        vref vrStore(store[i*vtype::VLEN]);
+        vrStore = vLoad[i];
       }
 
       for (int i = 0; i < NSEL; i++)
@@ -60,13 +63,26 @@ class SimdMemTest : public testing::Test
         ASSERT_EQ(sLoad[i], store[i]);
         store[i] = 0;
       }
+      
+      for (int i = 0; i < NVEL; i++)
+      {
+        vref vrStore(vStore[i]);
+        vrStore = vLoad[i];
+      }
+      
+      for (int i = 0; i < NSEL; i++)
+      {
+        stype* sLoad  = (stype*)vLoad;
+        stype* sStore = (stype*)vStore;
+        ASSERT_EQ(sLoad[i], sStore[i]);
+      }
 
       // test vstore from simd ref to simd ref
       for (int i = 0; i < NVEL; i++)
       {
-        vref vStore(store[i*vtype::VLEN]);
-        vref vLoad (data [i*vtype::VLEN]);
-        vStore = vLoad;
+        vref vrStore(store[i*vtype::VLEN]);
+        vref vrLoad (data [i*vtype::VLEN]);
+        vrStore = vrLoad;
       }
 
       for (int i = 0; i < NSEL; i++)

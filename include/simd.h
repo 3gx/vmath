@@ -9,14 +9,20 @@ struct Simd;
 template<>
 struct Simd<double>
 {
+  enum {VLEN = 8};
   private:
-    __m256d v1, v2;
+    union
+    {
+      struct {__m256d v1, v2;};
+      double  sVal[VLEN];
+    };
     Simd(const __m256d &val1, const __m256d &val2) : v1(val1), v2(val2) {}
   public:
-    enum {VLEN = 8};
 
     Simd() {}
+    Simd(const double x) { for (auto &s : sVal) s = x;}
 
+    double& base() {return sVal[0];}
     static Simd vloadu(const double *ptr)
     {
       return Simd(_mm256_loadu_pd(ptr), _mm256_loadu_pd(ptr+4));
@@ -50,14 +56,20 @@ struct Simd<double>
 template<>
 struct Simd<float>
 {
+  enum {VLEN = 8};
   private:
-    __m256 v;
+    union
+    {
+      __m256 v;
+      float sVal[VLEN];
+    };
     Simd(const __m256 &value) : v(value) {}
 
   public:
-    enum {VLEN = 8};
     Simd() {}
+    Simd(const double x) { for (auto &s : sVal) s = x;}
 
+    float& base() {return sVal[0];}
     inline static Simd vgather(const float *base, const Simd<int> &idx);
     inline static void vscatter(float *base, const Simd<int> &idx, const Simd &x);
 
@@ -91,21 +103,24 @@ struct Simd<float>
 template<>
 struct Simd<int>
 {
+  enum {VLEN = 8};
   private:
     union
     {
       __m256i v;
       struct {__m128i v1, v2;};
+      int sVal[VLEN];
     };
     Simd(const __m256i &value) : v(value) {}
 
   public:
-    enum {VLEN = 8};
     __m256i getFull() const { return v; }
     __m128i getFirst() const {return v1;}
     __m128i getSecond() const {return v2;}
     
     Simd() {}
+    Simd(const double x) { for (auto &s : sVal) s = x;}
+    int& base() {return sVal[0];}
     static Simd vloadu(const int *ptr)
     {
       return Simd(_mm256_loadu_si256(reinterpret_cast<const __m256i*>(ptr)));
@@ -217,7 +232,8 @@ struct SimdRefT
   private:
     T &ref;
   public:
-    SimdRefT(T& v) : ref(v) {}
+    SimdRefT(     T&  v) : ref(v) {}
+    SimdRefT(Simd<T> &v) : ref(v.base()) {}
     operator Simd<T>() const 
     {
       return Simd<T>::vloadu(&ref);
